@@ -253,6 +253,7 @@ func (c *Consumer) CommitOffsets() error {
 		return err
 	}
 
+	sarama.Logger.Printf("!!!!!!!!--sarama consumer committing offsets:%v", req)
 	resp, err := broker.CommitOffset(req)
 	if err != nil {
 		c.closeCoordinator(broker, err)
@@ -267,6 +268,7 @@ func (c *Consumer) CommitOffsets() error {
 				sub := c.subs.Fetch(topic, partition)
 				if sub != nil {
 					sub.MarkCommitted(state.Info.Offset)
+					sarama.Logger.Printf("!!!!!!!!--sarama consumer mark committed topic:%v partition %v offset:%v", topic, partition, state.Info.Offset)
 				}
 			}
 		}
